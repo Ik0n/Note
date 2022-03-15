@@ -4,13 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.NotesListActivity">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
+    tools:context=".ui.NotesActivity"
+    android:id="@+id/portrait_fragment_holder"
+    android:orientation="vertical">
 
 </LinearLayout>

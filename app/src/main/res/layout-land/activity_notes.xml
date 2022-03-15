@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/landscape_notes_list_fragment_holder"
+        android:layout_width="@dimen/zero_width"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/black"/>
+
+    <FrameLayout
+        android:id="@+id/landscape_notes_edit_fragment_holder"
+        android:layout_width="@dimen/zero_width"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:background="@color/black"/>
+
+
+</LinearLayout>
