@@ -94,7 +94,7 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_menu_settings, R.string.drawer_menu_about);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        
+
         NavigationView navigationView = findViewById(R.id.drawer_menu_nav);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -103,19 +103,36 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.drawer_menu_settings:
-                        manager
-                                .beginTransaction()
-                                .replace(R.id.portrait_fragment_holder, new SettingsFragment())
-                                .addToBackStack(null)
-                                .commit();
+                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            manager
+                                    .beginTransaction()
+                                    .replace(R.id.landscape_notes_edit_fragment_holder, new SettingsFragment())
+                                    .addToBackStack(null)
+                                    .commit();
+                        } else {
+                            manager
+                                    .beginTransaction()
+                                    .replace(R.id.portrait_fragment_holder, new SettingsFragment())
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+
                         drawerLayout.close();
                         return true;
                     case R.id.drawer_menu_about:
-                        manager
-                                .beginTransaction()
-                                .replace(R.id.portrait_fragment_holder, new AboutFragment())
-                                .addToBackStack(null)
-                                .commit();
+                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            manager
+                                    .beginTransaction()
+                                    .replace(R.id.landscape_notes_edit_fragment_holder, new AboutFragment())
+                                    .addToBackStack(null)
+                                    .commit();
+                        } else {
+                            manager
+                                    .beginTransaction()
+                                    .replace(R.id.portrait_fragment_holder, new AboutFragment())
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
                         drawerLayout.close();
                         return true;
                 }
