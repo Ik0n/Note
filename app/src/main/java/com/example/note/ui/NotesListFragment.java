@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,16 @@ public class NotesListFragment extends Fragment implements NoteAdapter.onNoteCli
         list = view.findViewById(R.id.list);
 
         Bundle args = getArguments();
+
         if (args != null) {
-            repo.update((Note) args.getSerializable(Note.NOTE));
+            Note note = (Note) args.getSerializable(Note.NOTE);
+            if (note.getId() != null) {
+                repo.update((Note) args.getSerializable(Note.NOTE));
+            } else {
+                repo.create(note);
+
+            }
+
         }
 
         adapter = new NoteAdapter();
