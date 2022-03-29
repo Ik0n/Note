@@ -64,10 +64,13 @@ public class EditNoteFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                note = (Note) getArguments().getSerializable(Note.NOTE);
-                note.setTitle(title.getText().toString());
-                note.setDescription(description.getText().toString());
+                if (getArguments() != null) {
+                    note = (Note) getArguments().getSerializable(Note.NOTE);
+                    note.setTitle(title.getText().toString());
+                    note.setDescription(description.getText().toString());
+                } else {
+                    note = new Note(title.getText().toString(), description.getText().toString());
+                }
 
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
@@ -118,6 +121,13 @@ public class EditNoteFragment extends Fragment {
 
             title.setText(note.getTitle());
             description.setText(note.getDescription());
+
+        } else {
+
+            if (note != null) {
+                args.putSerializable(Note.NOTE, note);
+                setArguments(args);
+            }
 
         }
 
