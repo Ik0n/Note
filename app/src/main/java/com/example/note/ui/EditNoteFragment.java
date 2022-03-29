@@ -64,6 +64,7 @@ public class EditNoteFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                manager.popBackStack();
                 if (getArguments() != null) {
                     note = (Note) getArguments().getSerializable(Note.NOTE);
                     note.setTitle(title.getText().toString());
@@ -73,7 +74,6 @@ public class EditNoteFragment extends Fragment {
                 }
 
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
                     manager
                             .beginTransaction()
                             .replace(R.id.landscape_notes_list_fragment_holder, NotesListFragment.getInstance(note))
