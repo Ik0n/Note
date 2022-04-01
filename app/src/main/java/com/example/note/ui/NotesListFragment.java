@@ -2,11 +2,15 @@ package com.example.note.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +31,8 @@ public class NotesListFragment extends Fragment implements NoteAdapter.onNoteCli
     private NoteAdapter adapter;
 
     private FragmentManager manager;
+
+    public static final int PENDING_REQUEST_ID = 416;
 
     public static NotesListFragment getInstance(Note note) {
 
@@ -56,7 +62,7 @@ public class NotesListFragment extends Fragment implements NoteAdapter.onNoteCli
                 repo.update((Note) args.getSerializable(Note.NOTE));
             } else {
                 repo.create(note);
-
+                showNotification(note);
             }
 
         }
@@ -70,6 +76,29 @@ public class NotesListFragment extends Fragment implements NoteAdapter.onNoteCli
 
         manager = requireActivity().getSupportFragmentManager();
 
+    }
+
+    private void showNotification(Note note) {
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireActivity(), NotesActivity.CHANNEL_ID);
+
+        Intent mainActivityIntent = new Intent(requireActivity(), NotesActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                requireActivity(),
+                PENDING_REQUEST_ID,
+                mainActivityIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        builder
+                .setContentTitle(note.getTitle())
+                .setSmallIcon(android.R.drawable.star_on)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setContentText(note.getDescription());
+
+        NotificationManagerCompat.from(requireActivity()).notify(666, builder.build());
     }
 
     @Override
