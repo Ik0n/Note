@@ -9,4 +9,6 @@
     <dimen name="note_item_corner_radius">30dp</dimen>
     <dimen name="note_item_bottom_padding">10dp</dimen>
     <dimen name="edit_note_fragment_padding">50dp</dimen>
+    <dimen name="note_date">10sp</dimen>
+    <dimen name="note_date_padding">10dp</dimen>
 </resources>

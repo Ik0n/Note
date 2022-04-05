@@ -17,14 +17,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.note.PopupMenuItemClicker;
 import com.example.note.R;
 import com.example.note.data.InMemoryRepoImp;
 import com.example.note.data.Note;
 import com.example.note.data.Repo;
 import com.example.note.recycler.NoteAdapter;
 
-public class NotesListFragment extends Fragment implements NoteAdapter.onNoteClickListener {
+public class NotesListFragment extends Fragment implements NoteAdapter.onNoteClickListener, PopupMenuItemClicker {
 
     private RecyclerView list;
     private Repo repo = InMemoryRepoImp.getInstance();
@@ -69,6 +71,7 @@ public class NotesListFragment extends Fragment implements NoteAdapter.onNoteCli
 
         adapter = new NoteAdapter();
         adapter.setOnNoteClickListener(this);
+        adapter.setPopupMenuItemClicker(this);
         adapter.setNotes(repo.getAll());
 
         list.setAdapter(adapter);
@@ -123,4 +126,10 @@ public class NotesListFragment extends Fragment implements NoteAdapter.onNoteCli
 
     }
 
+    @Override
+    public void delete(Note note, int position) {
+        repo.delete(note.getId());
+        adapter.delete(repo.getAll(), position);
+        Toast.makeText(requireActivity(), note.getTitle() + " is deleted.", Toast.LENGTH_SHORT).show();
+    }
 }
