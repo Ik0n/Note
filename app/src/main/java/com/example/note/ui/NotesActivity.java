@@ -1,19 +1,24 @@
 package com.example.note.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +37,7 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
     private Note note;
     private ActionBarDrawerToggle toggle;
 
+    public static final String CHANNEL_ID = "NOTIFY CHANNEL ID";
 
     @Override
     public void onNoteClick(Note note) {
@@ -47,8 +53,10 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
 
         manager = getSupportFragmentManager();
 
-
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel();
+        }
+        
         if (savedInstanceState == null) {
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -96,10 +104,18 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createNotificationChannel() {
+        String name = "notify";
+        String description = "notify description";
+        int channelImportance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, channelImportance);
+        channel.setDescription(description);
+        NotificationManagerCompat.from(this).createNotificationChannel(channel);
+    }
+
     @Override
     public void onBackPressed() {
-
-        Log.d("HAPPY", Integer.toString(manager.getBackStackEntryCount()));
 
         if (manager.getBackStackEntryCount() == 0) {
             new AlertDialog.Builder(this)
