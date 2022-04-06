@@ -6,4 +6,6 @@
     <string name="drawer_menu_about">About</string>
     <string name="my_nickname">Ik0n</string>
     <string name="context_delete">Delete</string>
+    <string name="edit_note_date">choose date</string>
+    <string name="date_picker_button_text">set</string>
 </resources>

@@ -13,4 +13,12 @@
         android:datePickerMode="calendar"
         />
 
+    <Button
+        android:id="@+id/date_picker_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/date_picker_button_text"
+        />
+
 </LinearLayout>
