@@ -24,6 +24,18 @@
         android:textAlignment="center"
         />
 
+    <EditText
+        android:id="@+id/edit_note_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:focusable="false"
+        android:clickable="false"
+        android:longClickable="false"
+        android:editable="false"
+        android:text="@string/edit_note_date"
+        />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/edit_button_save"
         android:layout_width="wrap_content"

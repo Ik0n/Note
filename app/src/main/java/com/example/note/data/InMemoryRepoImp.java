@@ -1,6 +1,8 @@
 package com.example.note.data;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class InMemoryRepoImp implements Repo {
@@ -13,19 +15,19 @@ public class InMemoryRepoImp implements Repo {
     }
 
     private void init() {
-        create(new Note("title 1", "description 1"));
-        create(new Note("title 2", "description 2"));
-        create(new Note("title 3", "description 3"));
-        create(new Note("title 4", "description 4"));
-        create(new Note("title 5", "description 5"));
-        create(new Note("title 6", "description 6"));
-        create(new Note("title 7", "description 7"));
-        create(new Note("title 8", "description 8"));
-        create(new Note("title 9", "description 9"));
-        create(new Note("title 10", "description 10"));
-        create(new Note("title 11", "description 11"));
-        create(new Note("title 12", "description 12"));
-        create(new Note("title 13", "description 13"));
+        create(new Note("title 1", "description 1", new Date(System.currentTimeMillis())));
+        create(new Note("title 2", "description 2", new Date(System.currentTimeMillis())));
+        create(new Note("title 3", "description 3", new Date(System.currentTimeMillis())));
+        create(new Note("title 4", "description 4", new Date(System.currentTimeMillis())));
+        create(new Note("title 5", "description 5", new Date(System.currentTimeMillis())));
+        create(new Note("title 6", "description 6", new Date(System.currentTimeMillis())));
+        create(new Note("title 7", "description 7", new Date(System.currentTimeMillis())));
+        create(new Note("title 8", "description 8", new Date(System.currentTimeMillis())));
+        create(new Note("title 9", "description 9", new Date(System.currentTimeMillis())));
+        create(new Note("title 10", "description 10", new Date(System.currentTimeMillis())));
+        create(new Note("title 11", "description 11", new Date(System.currentTimeMillis())));
+        create(new Note("title 12", "description 12", new Date(System.currentTimeMillis())));
+        create(new Note("title 13", "description 13", new Date(System.currentTimeMillis())));
     }
 
     public static InMemoryRepoImp getInstance() {

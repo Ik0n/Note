@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.note.PopupMenuItemClicker;
 import com.example.note.R;
 import com.example.note.data.Note;
 
@@ -15,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteHolder> {
+
+    private PopupMenuItemClicker popupMenuItemClicker;
+    public void setPopupMenuItemClicker(PopupMenuItemClicker popupMenuItemClicker) {
+        this.popupMenuItemClicker = popupMenuItemClicker;
+    }
 
     private List<Note> notes = new ArrayList<>();
 
@@ -25,7 +31,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteHolder> {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.note_item, parent, false);
 
-        return new NoteHolder(view, listener);
+        return new NoteHolder(view, listener, popupMenuItemClicker);
     }
 
     @Override
@@ -41,6 +47,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteHolder> {
     public void setNotes(List<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
+    }
+
+    public void delete(List<Note> notes, int position) {
+
+        this.notes = notes;
+        notifyItemRemoved(position);
+
     }
 
     public interface onNoteClickListener {
