@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentResultListener;
 
 import com.example.note.DatePickerDialog;
 import com.example.note.R;
+import com.example.note.data.InMemoryRepoImp;
 import com.example.note.data.Note;
 
 import java.text.DateFormat;
@@ -62,24 +63,32 @@ public class EditNoteFragment extends Fragment {
         description = view.findViewById(R.id.edit_note_description);
         date = view.findViewById(R.id.edit_note_date);
         save = view.findViewById(R.id.edit_button_save);
+
         getParentFragmentManager().setFragmentResultListener(DatePickerDialog.DATE_PICKER_DIALOG, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 formatDate = (Date) result.getSerializable(DatePickerDialog.DATE_PICKER_DIALOG);
                 date.setText(new SimpleDateFormat("dd.MM.yy").format(formatDate));
-
             }
         });
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDatePickerDialog();
             }
         });
+
+        manager = requireActivity().getSupportFragmentManager();
+
         if (getArguments() != null) {
             note = (Note) getArguments().getSerializable(Note.NOTE);
+            manager.setFragmentResult("TEST", getArguments());
         }
-        manager = requireActivity().getSupportFragmentManager();
+
+
+
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +97,7 @@ public class EditNoteFragment extends Fragment {
                     note = (Note) getArguments().getSerializable(Note.NOTE);
                     note.setTitle(title.getText().toString());
                     note.setDescription(description.getText().toString());
-                    note.setDate(formatDate);
+                    note.setDate(formatDate != null ? formatDate : new Date(System.currentTimeMillis()));
                 } else {
                     note = new Note(title.getText().toString(), description.getText().toString(), formatDate);
                 }

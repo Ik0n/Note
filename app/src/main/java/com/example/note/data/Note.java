@@ -12,6 +12,7 @@ public class Note implements Serializable {
     private Integer id;
     private String title;
     private String description;
+    private Date date;
 
     public Date getDate() {
         return date;
@@ -20,8 +21,6 @@ public class Note implements Serializable {
     public void setDate(Date date) {
         this.date = date;
     }
-
-    private Date date;
 
     public Note(String title, String description, Date date) {
         this.title = title;
