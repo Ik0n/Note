@@ -39,6 +39,8 @@ public class EditNoteFragment extends Fragment {
     private FragmentManager manager;
     private Date formatDate;
 
+    private Boolean flag = false;
+
     public interface Controller {
         void saveButtonPressed(Note note);
     }
@@ -83,7 +85,7 @@ public class EditNoteFragment extends Fragment {
 
         if (getArguments() != null) {
             note = (Note) getArguments().getSerializable(Note.NOTE);
-            manager.setFragmentResult("TEST", getArguments());
+            manager.setFragmentResult("TEST1", getArguments());
         }
 
 
@@ -92,6 +94,7 @@ public class EditNoteFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                flag = true;
                 manager.popBackStack();
                 if (getArguments() != null) {
                     note = (Note) getArguments().getSerializable(Note.NOTE);
@@ -99,7 +102,11 @@ public class EditNoteFragment extends Fragment {
                     note.setDescription(description.getText().toString());
                     note.setDate(formatDate != null ? formatDate : new Date(System.currentTimeMillis()));
                 } else {
-                    note = new Note(title.getText().toString(), description.getText().toString(), formatDate);
+                    note = new Note(
+                            title.getText().toString(),
+                            description.getText().toString(),
+                            formatDate == null ? new Date(System.currentTimeMillis()) : formatDate
+                    );
                 }
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     manager
@@ -134,13 +141,13 @@ public class EditNoteFragment extends Fragment {
         if (args != null) {
             if (note != null) {
                 note = (Note) args.getSerializable(Note.NOTE);
+                title.setText(note.getTitle());
+                description.setText(note.getDescription());
+                date.setText(new SimpleDateFormat("dd.MM.yy").format(note.getDate()));
             } else {
                 args.putSerializable(Note.NOTE, note);
                 setArguments(args);
             }
-            title.setText(note.getTitle());
-            description.setText(note.getDescription());
-            date.setText(new SimpleDateFormat("dd.MM.yy").format(note.getDate()));
         } else {
             if (note != null) {
                 args.putSerializable(Note.NOTE, note);

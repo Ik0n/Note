@@ -54,10 +54,12 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
 
         manager = getSupportFragmentManager();
 
-        manager.setFragmentResultListener("TEST", this, new FragmentResultListener() {
+        manager.setFragmentResultListener("TEST1", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                note = (Note) result.getSerializable(Note.NOTE);
+                if (result.getSerializable(Note.NOTE) != null)
+                    note = (Note) result.getSerializable(Note.NOTE);
+                //Log.d("Happy", note.getTitle());
             }
         });
 
@@ -84,7 +86,7 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
             }
 
         } else {
-
+            manager.popBackStack();
             this.note = (Note) savedInstanceState.getSerializable(Note.NOTE);
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -114,7 +116,7 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
                 if (note != null) {
                     manager
                             .beginTransaction()
-                            .replace(R.id.portrait_fragment_holder, EditNoteFragment.getInstance(this.note))
+                            .replace(R.id.portrait_fragment_holder, EditNoteFragment.getInstance(note))
                             .addToBackStack(null)
                             .commit();
                 } else {
