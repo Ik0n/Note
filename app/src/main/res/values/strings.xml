@@ -8,4 +8,5 @@
     <string name="context_delete">Delete</string>
     <string name="edit_note_date">choose date</string>
     <string name="date_picker_button_text">set</string>
+    <string name="top_navigation_menu_home_button">List</string>
 </resources>

@@ -1,5 +1,13 @@
 package com.example.note.data;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.example.note.NotesApplication;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,8 +18,13 @@ public class InMemoryRepoImp implements Repo {
     private static InMemoryRepoImp repo;
     private ArrayList<Note> notes = new ArrayList<>();
 
+    private SharedPreferences preferences;
+    private static final String NOTES_KEY = "NOTES_KEY";
+    private Gson gson = new Gson();
+
     private InMemoryRepoImp() {
-        init();
+        preferences = PreferenceManager.getDefaultSharedPreferences(NotesApplication.getInstance());
+        //init();
     }
 
     private void init() {
@@ -45,6 +58,12 @@ public class InMemoryRepoImp implements Repo {
         int id = counter++;
         note.setId(id);
         notes.add(note);
+
+        preferences
+                .edit()
+                .putString(NOTES_KEY, gson.toJson(notes))
+                .apply();
+
         return id;
     }
 
@@ -55,6 +74,7 @@ public class InMemoryRepoImp implements Repo {
                 return notes.get(i);
             }
         }
+
         return null;
     }
 
@@ -63,6 +83,12 @@ public class InMemoryRepoImp implements Repo {
         for (int i = 0; i < notes.size(); i++) {
             if (notes.get(i).getId().equals(note.getId())) {
                 notes.set(i, note);
+
+                preferences
+                        .edit()
+                        .putString(NOTES_KEY, gson.toJson(notes))
+                        .apply();
+
                 break;
             }
         }
@@ -73,6 +99,12 @@ public class InMemoryRepoImp implements Repo {
         for (int i = 0; i < notes.size(); i++) {
             if (notes.get(i).getId().equals(id)) {
                 notes.remove(i);
+                
+                preferences
+                        .edit()
+                        .putString(NOTES_KEY, gson.toJson(notes))
+                        .apply();
+
                 break;
             }
         }
@@ -80,6 +112,25 @@ public class InMemoryRepoImp implements Repo {
 
     @Override
     public List<Note> getAll() {
+
+        String data = preferences.getString(NOTES_KEY, "{}");
+
+        try {
+
+            notes = gson.fromJson(
+                    data,
+                    new TypeToken<List<Note>>(){}.getType()
+            );
+
+        } catch (Exception e) {
+
+            Log.d("happy", e.getMessage());
+
+        }
+
+        if (notes == null)
+            notes = new ArrayList<>();
+
         return notes;
     }
 }

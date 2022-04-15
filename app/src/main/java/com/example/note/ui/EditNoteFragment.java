@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentResultListener;
 
 import com.example.note.DatePickerDialog;
 import com.example.note.R;
+import com.example.note.data.InMemoryRepoImp;
 import com.example.note.data.Note;
 
 import java.text.DateFormat;
@@ -37,6 +38,8 @@ public class EditNoteFragment extends Fragment {
     private Button save;
     private FragmentManager manager;
     private Date formatDate;
+
+    private Boolean flag = false;
 
     public interface Controller {
         void saveButtonPressed(Note note);
@@ -62,35 +65,48 @@ public class EditNoteFragment extends Fragment {
         description = view.findViewById(R.id.edit_note_description);
         date = view.findViewById(R.id.edit_note_date);
         save = view.findViewById(R.id.edit_button_save);
+
         getParentFragmentManager().setFragmentResultListener(DatePickerDialog.DATE_PICKER_DIALOG, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 formatDate = (Date) result.getSerializable(DatePickerDialog.DATE_PICKER_DIALOG);
                 date.setText(new SimpleDateFormat("dd.MM.yy").format(formatDate));
-
             }
         });
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDatePickerDialog();
             }
         });
+
+        manager = requireActivity().getSupportFragmentManager();
+
         if (getArguments() != null) {
             note = (Note) getArguments().getSerializable(Note.NOTE);
+            manager.setFragmentResult("TEST1", getArguments());
         }
-        manager = requireActivity().getSupportFragmentManager();
+
+
+
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                flag = true;
                 manager.popBackStack();
                 if (getArguments() != null) {
                     note = (Note) getArguments().getSerializable(Note.NOTE);
                     note.setTitle(title.getText().toString());
                     note.setDescription(description.getText().toString());
-                    note.setDate(formatDate);
+                    note.setDate(formatDate != null ? formatDate : new Date(System.currentTimeMillis()));
                 } else {
-                    note = new Note(title.getText().toString(), description.getText().toString(), formatDate);
+                    note = new Note(
+                            title.getText().toString(),
+                            description.getText().toString(),
+                            formatDate == null ? new Date(System.currentTimeMillis()) : formatDate
+                    );
                 }
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     manager
@@ -125,13 +141,13 @@ public class EditNoteFragment extends Fragment {
         if (args != null) {
             if (note != null) {
                 note = (Note) args.getSerializable(Note.NOTE);
+                title.setText(note.getTitle());
+                description.setText(note.getDescription());
+                date.setText(new SimpleDateFormat("dd.MM.yy").format(note.getDate()));
             } else {
                 args.putSerializable(Note.NOTE, note);
                 setArguments(args);
             }
-            title.setText(note.getTitle());
-            description.setText(note.getDescription());
-            date.setText(new SimpleDateFormat("dd.MM.yy").format(note.getDate()));
         } else {
             if (note != null) {
                 args.putSerializable(Note.NOTE, note);

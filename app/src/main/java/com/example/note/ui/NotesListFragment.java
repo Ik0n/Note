@@ -106,7 +106,6 @@ public class NotesListFragment extends Fragment implements NoteAdapter.onNoteCli
 
     @Override
     public void onNoteClick(Note note) {
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
             manager

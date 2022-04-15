@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.navigation.NavController;
 import androidx.navigation.ui.AppBarConfiguration;
 
@@ -53,12 +54,21 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
 
         manager = getSupportFragmentManager();
 
+        manager.setFragmentResultListener("TEST1", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                if (result.getSerializable(Note.NOTE) != null)
+                    note = (Note) result.getSerializable(Note.NOTE);
+                //Log.d("Happy", note.getTitle());
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel();
         }
         
         if (savedInstanceState == null) {
-
+            manager.popBackStack();
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
                 manager
@@ -76,7 +86,7 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
             }
 
         } else {
-
+            manager.popBackStack();
             this.note = (Note) savedInstanceState.getSerializable(Note.NOTE);
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -85,22 +95,39 @@ public class NotesActivity extends AppCompatActivity implements NoteAdapter.onNo
                         .beginTransaction()
                         .replace(R.id.landscape_notes_list_fragment_holder, new NotesListFragment())
                         .commit();
-            /*
-                manager
-                        .beginTransaction()
-                        .replace(R.id.landscape_notes_edit_fragment_holder, EditNoteFragment.getInstance(this.note))
-                        .commit();
-            */
-            } else {
+                if (note != null) {
+                    manager
+                            .beginTransaction()
+                            .replace(R.id.landscape_notes_edit_fragment_holder, EditNoteFragment.getInstance(this.note))
+                            .addToBackStack(null)
+                            .commit();
 
-                manager
-                        .beginTransaction()
-                        .replace(R.id.portrait_fragment_holder, new NotesListFragment())
-                        .commit();
+                } else {
+
+                    manager
+                            .beginTransaction()
+                            .replace(R.id.landscape_notes_edit_fragment_holder, new EditNoteFragment())
+                            .addToBackStack(null)
+                            .commit();
+
+                }
+
+            } else {
+                if (note != null) {
+                    manager
+                            .beginTransaction()
+                            .replace(R.id.portrait_fragment_holder, EditNoteFragment.getInstance(note))
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    manager
+                            .beginTransaction()
+                            .replace(R.id.portrait_fragment_holder, new NotesListFragment())
+                            .commit();
+                }
             }
 
         }
-
 
     }
 
